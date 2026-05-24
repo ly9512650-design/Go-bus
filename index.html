@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جوباص | GoBus - أسرع حجز أونلاين لتذاكر أتوبيسات السفر</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #F7941D;
+            --primary-dark: #1B2A4A;
+            --primary-blue: #2C3E6B;
+            --accent-gold: #D4AF37;
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --shadow-soft: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --shadow-card: 0 10px 40px rgba(27, 42, 74, 0.12);
+            --gradient-hero: linear-gradient(135deg, #1B2A4A 0%, #2C3E6B 50%, #1B2A4A 100%);
+            --gradient-orange: linear-gradient(135deg, #F7941D 0%, #E8850A 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-orange);
+            border-radius: 4px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes rotateIn {
+            from { opacity: 0; transform: rotate(-10deg) scale(0.8); }
+            to { opacity: 1; transform: rotate(0deg) scale(1); }
+        }
+        @keyframes busMove {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes roadLine {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50px); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+        .navbar.scrolled {
+            background: rgba(27, 42, 74, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 10px 0;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+        }
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            animation: fadeInRight 0.8s ease;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-orange);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(247, 148, 29, 0.4);
+        }
+        .logo-text {
+            color: white;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .logo-text span {
+            color: var(--primary-orange);
+        }
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            animation: fadeInLeft 0.8s ease;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-orange);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: white;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-cta {
+            background: var(--gradient-orange);
+            color: white !important;
+            padding: 10px 28px !important;
+            border-radius: 50px;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 20px rgba(247, 148, 29, 0.35);
+            transition: all 0.3s ease !important;
+        }
+        .nav-cta::after { display: none !important; }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(247, 148, 29, 0.5);
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.04)"/><circle cx="60" cy="60" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="70" r="1.5" fill="rgba(255,255,255,0.03)"/></svg>');
+            background-size: 200px 200px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .hero-video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(27,42,74,0.9) 0%, rgba(27,42,74,0.7) 50%, rgba(27,42,74,0.85) 100%);
+            z-index: 1;
+        }
+        .hero-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+        .hero-content h1 .highlight {
+            color: var(--primary-orange);
+            position: relative;
+            display: inline-block;
+        }
+        .hero-content h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: rgba(247, 148, 29, 0.25);
+            border-radius: 4px;
+            z-index: -1;
+        }
+        .hero-content p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 35px;
+            max-width: 500px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--primary-orange);
+            display: block;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .btn-primary {
+            background: var(--gradient-orange);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(247, 148, 29, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(247, 148, 29, 0.5);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeInLeft 1.2s ease;
+        }
+        .hero-bus-container {
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+        }
+        .hero-bus-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+        .hero-bus-img:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        .hero-badge {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-soft);
+            animation: scaleIn 0.8s ease both;
+        }
+        .badge-1 {
+            top: 20px;
+            left: -20px;
+            animation-delay: 0.8s;
+        }
+        .badge-2 {
+            bottom: 40px;
+            right: -10px;
+            animation-delay: 1s;
+        }
+        .badge-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-orange);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .badge-text strong {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .badge-text span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .booking-widget {
+            position: relative;
+            z-index: 10;
+            margin-top: -80px;
+            padding: 0 25px;
+        }
+        .booking-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow-card);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 20px;
+            align-items: end;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+        .booking-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .booking-field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .booking-field label i {
+            color: var(--primary-orange);
+        }
+        .booking-field input, .booking-field select {
+            padding: 14px 18px;
+            border: 2px solid #E2E8F0;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            background: #F8FAFC;
+            transition: all 0.3s;
+            outline: none;
+        }
+        .booking-field input:focus, .booking-field select:focus {
+            border-color: var(--primary-orange);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(247, 148, 29, 0.1);
+        }
+        .booking-btn {
+            background: var(--gradient-orange);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(247, 148, 29, 0.35);
+            transition: all 0.3s;
+        }
+        .booking-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(247, 148, 29, 0.45);
+        }
+
+        .section {
+            padding: 100px 25px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-tag {
+            display: inline-block;
+            background: rgba(247, 148, 29, 0.1);
+            color: var(--primary-orange);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border: 1px solid rgba(247, 148, 29, 0.2);
+        }
+        .section-title {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        .section-title span {
+            color: var(--primary-orange);
+        }
+        .section-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-orange);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(27, 42, 74, 0.15);
+        }
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(247,148,29,0.1) 0%, rgba(247,148,29,0.05) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 28px;
+            color: var(--primary-orange);
+            transition: all 0.3s;
+        }
+        .feature-card:hover .feature-icon {
+            background: var(--gradient-orange);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+        }
+        .feature-card p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .fleet-section {
+            background: linear-gradient(180deg, var(--light-bg) 0%, white 100%);
+        }
+        .fleet-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+        }
+        .fleet-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        .fleet-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(27, 42, 74, 0.18);
+        }
+        .fleet-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 240px;
+        }
+        .fleet-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .fleet-card:hover .fleet-img {
+            transform: scale(1.1);
+        }
+        .fleet-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-orange);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(247, 148, 29, 0.4);
+        }
+        .fleet-content {
+            padding: 30px;
+        }
+        .fleet-content h3 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+        }
+        .fleet-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .fleet-feature-tag {
+            background: #F1F5F9;
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .fleet-feature-tag i {
+            color: var(--primary-orange);
+            font-size: 12px;
+        }
+        .fleet-price {
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .fleet-price .currency {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+        .fleet-price .amount {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary-dark);
+        }
+        .fleet-price .period {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .fleet-btn {
+            width: 100%;
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .fleet-btn:hover {
+            background: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+
+        .routes-section {
+            background: var(--primary-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .routes-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(247,148,29,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .routes-section .section-title,
+        .routes-section .section-desc {
+            color: white;
+        }
+        .routes-section .section-tag {
+            background: rgba(247, 148, 29, 0.15);
+            color: var(--primary-orange);
+            border-color: rgba(247, 148, 29, 0.3);
+        }
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        .route-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .route-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-orange);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        .route-card:hover::after {
+            transform: scaleX(1);
+        }
+        .route-card:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-5px);
+            border-color: rgba(247, 148, 29, 0.3);
+        }
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .route-cities {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .route-city {
+            text-align: center;
+        }
+        .route-city strong {
+            display: block;
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .route-city span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+        .route-arrow {
+            color: var(--primary-orange);
+            font-size: 20px;
+        }
+        .route-duration {
+            background: rgba(247, 148, 29, 0.2);
+            color: var(--primary-orange);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .route-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .route-price {
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+        }
+        .route-price span {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+        .route-book {
+            color: var(--primary-orange);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: gap 0.3s;
+        }
+        .route-book:hover {
+            gap: 15px;
+        }
+
+        .video-section {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(27, 42, 74, 0.7);
+        }
+        .video-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+        }
+        .video-play-btn {
+            width: 90px;
+            height: 90px;
+            background: var(--gradient-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(247, 148, 29, 0.5);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+            border: none;
+        }
+        .video-play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 50px rgba(247, 148, 29, 0.6);
+        }
+        .video-play-btn i {
+            color: white;
+            font-size: 28px;
+            margin-right: -4px;
+        }
+        .video-content h2 {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+        .video-content p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 80px;
+            color: rgba(247, 148, 29, 0.1);
+            font-family: serif;
+            line-height: 1;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(27, 42, 74, 0.12);
+        }
+        .testimonial-stars {
+            color: #FBBF24;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 4px;
+        }
+        .testimonial-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 18px;
+        }
+        .author-info strong {
+            display: block;
+            color: var(--primary-dark);
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .author-info span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .app-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 80px 25px;
+        }
+        .app-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(247,148,29,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .app-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .app-content h2 {
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        .app-content h2 span {
+            color: var(--primary-orange);
+        }
+        .app-content p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 35px;
+            line-height: 1.8;
+        }
+        .app-features {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+        .app-feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255,255,255,0.85);
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .app-feature i {
+            width: 36px;
+            height: 36px;
+            background: rgba(247, 148, 29, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            font-size: 14px;
+        }
+        .app-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .app-btn {
+            background: white;
+            color: var(--primary-dark);
+            padding: 14px 28px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .app-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .app-btn i {
+            font-size: 22px;
+        }
+        .app-visual {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+        .app-mockup {
+            width: 280px;
+            height: 560px;
+            background: white;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            border: 8px solid var(--primary-dark);
+        }
+        .app-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: var(--primary-dark);
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+        .app-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--light-bg);
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-screen-header {
+            background: var(--gradient-orange);
+            padding: 40px 20px 20px;
+            color: white;
+            text-align: center;
+        }
+        .app-screen-header h4 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .app-screen-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .app-trip-card {
+            background: white;
+            border-radius: 14px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .app-trip-info strong {
+            display: block;
+            font-size: 14px;
+            color: var(--primary-dark);
+        }
+        .app-trip-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .app-trip-price {
+            color: var(--primary-orange);
+            font-weight: 800;
+            font-size: 16px;
+        }
+        .app-mockup-float {
+            position: absolute;
+            width: 180px;
+            height: 100px;
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .mockup-float-1 {
+            top: 50px;
+            left: -30px;
+            animation-delay: 0s;
+        }
+        .mockup-float-2 {
+            bottom: 80px;
+            right: -20px;
+            animation-delay: 1.5s;
+        }
+        .mockup-float-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-orange);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        .mockup-float-text strong {
+            display: block;
+            font-size: 14px;
+            color: var(--primary-dark);
+        }
+        .mockup-float-text span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 80px 25px 30px;
+        }
+        .footer-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+        .footer-brand .logo-text {
+            color: white;
+            margin-bottom: 20px;
+        }
+        .footer-brand p {
+            color: rgba(255,255,255,0.6);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+        .footer-social a {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .footer-social a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+        .footer-col h4 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            color: white;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+        .footer-col a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-col a:hover {
+            color: var(--primary-orange);
+            padding-right: 5px;
+        }
+        .footer-col a i {
+            font-size: 12px;
+            color: var(--primary-orange);
+        }
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: rgba(255,255,255,0.6);
+            font-size: 15px;
+        }
+        .footer-contact-item i {
+            width: 36px;
+            height: 36px;
+            background: rgba(247, 148, 29, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            font-size: 14px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-bottom p {
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 25px;
+        }
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--primary-dark);
+            z-index: 2000;
+            padding: 80px 30px 30px;
+            transition: right 0.4s ease;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.3);
+        }
+        .mobile-menu.active {
+            right: 0;
+        }
+        .mobile-menu-close {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .mobile-menu ul {
+            list-style: none;
+        }
+        .mobile-menu li {
+            margin-bottom: 20px;
+        }
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            display: block;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--primary-dark);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast i {
+            color: var(--primary-orange);
+            font-size: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content p {
+                margin: 0 auto 35px;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-visual {
+                order: -1;
+            }
+            .hero-bus-img {
+                max-width: 500px;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .fleet-grid, .routes-grid, .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .app-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .app-features {
+                align-items: center;
+            }
+            .app-buttons {
+                justify-content: center;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            .hero-content p {
+                font-size: 16px;
+            }
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .booking-container {
+                grid-template-columns: 1fr;
+            }
+            .features-grid, .fleet-grid, .routes-grid, .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 30px;
+            }
+            .app-content h2 {
+                font-size: 30px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .video-content h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">Go</div>
+                <div class="logo-text">go<span>bus.</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#features">مميزاتنا</a></li>
+                <li><a href="#fleet">الأسطول</a></li>
+                <li><a href="#routes">الرحلات</a></li>
+                <li><a href="#app">التطبيق</a></li>
+                <li><a href="#contact">تواصل معنا</a></li>
+                <li><a href="#booking" class="nav-cta">احجز الآن</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul>
+            <li><a href="#home" onclick="toggleMobileMenu()">الرئيسية</a></li>
+            <li><a href="#features" onclick="toggleMobileMenu()">مميزاتنا</a></li>
+            <li><a href="#fleet" onclick="toggleMobileMenu()">الأسطول</a></li>
+            <li><a href="#routes" onclick="toggleMobileMenu()">الرحلات</a></li>
+            <li><a href="#app" onclick="toggleMobileMenu()">التطبيق</a></li>
+            <li><a href="#contact" onclick="toggleMobileMenu()">تواصل معنا</a></li>
+            <li><a href="#booking" onclick="toggleMobileMenu()" style="color: var(--primary-orange);">احجز الآن</a></li>
+        </ul>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>أسرع حجز <span class="highlight">أونلاين</span><br>لتذاكر أتوبيسات السفر</h1>
+                <p>أفضل خدمة رحلات نقل داخلي في مصر. اختار بين مختلف الفئات والمسارات والمحطات في أقل من دقيقتين.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">+400</span>
+                        <span class="stat-label">أتوبيس حديث</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">+27</span>
+                        <span class="stat-label">مدينة مغطاة</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">+5K</span>
+                        <span class="stat-label">راكب يومياً</span>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="#booking" class="btn-primary">
+                        <i class="fas fa-ticket-alt"></i>
+                        احجز تذكرتك الآن
+                    </a>
+                    <a href="#video" class="btn-secondary">
+                        <i class="fas fa-play-circle"></i>
+                        شاهد الفيديو
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-bus-container">
+                    <img src="https://kimi-web-img.moonshot.cn/img/go-bus.com/e847174c57897f187e8992ac7d7ae778b88e220c.png" alt="GoBus Fleet" class="hero-bus-img">
+                    <div class="hero-badge badge-1">
+                        <div class="badge-icon"><i class="fas fa-wifi"></i></div>
+                        <div class="badge-text">
+                            <strong>واي فاي مجاني</strong>
+                            <span>في جميع الأتوبيسات</span>
+                        </div>
+                    </div>
+                    <div class="hero-badge badge-2">
+                        <div class="badge-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="badge-text">
+                            <strong>رحلات آمنة 100%</strong>
+                            <span>سائقون محترفون</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="booking-widget" id="booking">
+        <div class="booking-container">
+            <div class="booking-field">
+                <label><i class="fas fa-map-marker-alt"></i> من</label>
+                <select id="fromCity">
+                    <option value="">اختر مدينة الانطلاق</option>
+                    <option value="cairo">القاهرة</option>
+                    <option value="alex">الإسكندرية</option>
+                    <option value="luxor">الأقصر</option>
+                    <option value="hurghada">الغردقة</option>
+                    <option value="sharm">شرم الشيخ</option>
+                    <option value="dahab">دهب</option>
+                    <option value="aswan">أسوان</option>
+                </select>
+            </div>
+            <div class="booking-field">
+                <label><i class="fas fa-map-pin"></i> إلى</label>
+                <select id="toCity">
+                    <option value="">اختر مدينة الوصول</option>
+                    <option value="cairo">القاهرة</option>
+                    <option value="alex">الإسكندرية</option>
+                    <option value="luxor">الأقصر</option>
+                    <option value="hurghada">الغردقة</option>
+                    <option value="sharm">شرم الشيخ</option>
+                    <option value="dahab">دهب</option>
+                    <option value="aswan">أسوان</option>
+                </select>
+            </div>
+            <div class="booking-field">
+                <label><i class="fas fa-calendar-alt"></i> تاريخ السفر</label>
+                <input type="date" id="travelDate">
+            </div>
+            <div class="booking-field">
+                <label><i class="fas fa-users"></i> عدد الركاب</label>
+                <select id="passengers">
+                    <option value="1">1 راكب</option>
+                    <option value="2">2 ركاب</option>
+                    <option value="3">3 ركاب</option>
+                    <option value="4">4 ركاب</option>
+                    <option value="5">5 ركاب</option>
+                </select>
+            </div>
+            <button class="booking-btn" onclick="searchTrips()">
+                <i class="fas fa-search"></i>
+                ابحث
+            </button>
+        </div>
+    </div>
+
+    <section class="section" id="features">
+        <div class="section-header animate-on-scroll">
+            <span class="section-tag">لماذا تختار جوباص؟</span>
+            <h2 class="section-title">مميزات <span>حصرية</span> لرحلة مريحة</h2>
+            <p class="section-desc">نوفر لك تجربة سفر فريدة مع أحدث وسائل الراحة والأمان</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll delay-1">
+                <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+                <h3>واي فاي مجاني</h3>
+                <p>اتصل بالإنترنت طوال الرحلة مع سرعات عالية في جميع فئات الأتوبيسات</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-2">
+                <div class="feature-icon"><i class="fas fa-tv"></i></div>
+                <h3>شاشات ترفيهية</h3>
+                <p>شاشات لمس شخصية مع أفلام ومسلسلات عالمية لقضاء وقت ممتع</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-3">
+                <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                <h3>شواحن USB</h3>
+                <p>منافذ شحن USB متوفرة على كل مقعد لإبقاء أجهزتك مشحونة</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-4">
+                <div class="feature-icon"><i class="fas fa-coffee"></i></div>
+                <h3>مشروبات ووجبات خفيفة</h3>
+                <p>استمتع بمشروبات ساخنة ووجبات خفيفة مجانية في الفئات المميزة</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-1">
+                <div class="feature-icon"><i class="fas fa-snowflake"></i></div>
+                <h3>تكييف ممتاز</h3>
+                <p>نظام تكييف حديث يضمن درجة حرارة مثالية طوال الرحلة</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-2">
+                <div class="feature-icon"><i class="fas fa-toilet"></i></div>
+                <h3>حمامات نظيفة</h3>
+                <p>حمامات نظيفة ومجهزة في الأتوبيسات المجهزة للرحلات الطويلة</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-3">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>أمان شامل</h3>
+                <p>كاميرات مراقبة ونظام GPS لتتبع الرحلة وللمساعدة في حالات الطوارئ</p>
+            </div>
+            <div class="feature-card animate-on-scroll delay-4">
+                <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                <h3>خدمة عملاء 24/7</h3>
+                <p>فريق خدمة عملاء متاح على مدار الساعة للإجابة على استفساراتك</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fleet-section" id="fleet">
+        <div class="section-header animate-on-scroll">
+            <span class="section-tag">أسطولنا الحديث</span>
+            <h2 class="section-title">اختر <span>فئتك</span> المفضلة</h2>
+            <p class="section-desc">مجموعة متنوعة من الأتوبيسات الحديثة لتناسب جميع احتياجاتك وميزانيتك</p>
+        </div>
+        <div class="fleet-grid">
+            <div class="fleet-card animate-on-scroll delay-1">
+                <div class="fleet-img-wrapper">
+                    <img src="https://kimi-web-img.moonshot.cn/img/dynamic-media-cdn.tripadvisor.com/fd619c1a089472b56445b4910eddda4d33af2765.jpg" alt="GoBus Classic" class="fleet-img">
+                    <span class="fleet-badge">الأكثر طلباً</span>
+                </div>
+                <div class="fleet-content">
+                    <h3>كلاسيك Classic</h3>
+                    <div class="fleet-features">
+                        <span class="fleet-feature-tag"><i class="fas fa-snowflake"></i> تكييف</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-tv"></i> تلفزيون</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-chair"></i> مقاعد مريحة</span>
+                    </div>
+                    <div class="fleet-price">
+                        <span class="currency">ج.م</span>
+                        <span class="amount">115</span>
+                        <span class="period">/ للرحلة</span>
+                    </div>
+                    <button class="fleet-btn" onclick="showToast('تم اختيار فئة كلاسيك')">
+                        <i class="fas fa-ticket-alt"></i>
+                        احجز الآن
+                    </button>
+                </div>
+            </div>
+            <div class="fleet-card animate-on-scroll delay-2">
+                <div class="fleet-img-wrapper">
+                    <img src="https://kimi-web-img.moonshot.cn/img/cdn.bookaway.com/7bacb3de3ee681acc13c0e48e68242134573fd3e.png" alt="GoBus Elite Plus" class="fleet-img">
+                    <span class="fleet-badge">مميز</span>
+                </div>
+                <div class="fleet-content">
+                    <h3>إيليت بلس Elite Plus</h3>
+                    <div class="fleet-features">
+                        <span class="fleet-feature-tag"><i class="fas fa-wifi"></i> واي فاي</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-tv"></i> شاشة لمس</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-coffee"></i> مشروبات</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-plug"></i> شاحن</span>
+                    </div>
+                    <div class="fleet-price">
+                        <span class="currency">ج.م</span>
+                        <span class="amount">225</span>
+                        <span class="period">/ للرحلة</span>
+                    </div>
+                    <button class="fleet-btn" onclick="showToast('تم اختيار فئة إيليت بلس')">
+                        <i class="fas fa-ticket-alt"></i>
+                        احجز الآن
+                    </button>
+                </div>
+            </div>
+            <div class="fleet-card animate-on-scroll delay-3">
+                <div class="fleet-img-wrapper">
+                    <img src="https://kimi-web-img.moonshot.cn/img/waya.media/0e26a3a4149a82a0057a6cea4f4597adf8af8b76.png" alt="GoBus Double Decker" class="fleet-img">
+                    <span class="fleet-badge">VIP</span>
+                </div>
+                <div class="fleet-content">
+                    <h3>دبل ديكر Double Decker</h3>
+                    <div class="fleet-features">
+                        <span class="fleet-feature-tag"><i class="fas fa-wifi"></i> واي فاي</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-tv"></i> شاشة خاصة</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-utensils"></i> وجبات</span>
+                        <span class="fleet-feature-tag"><i class="fas fa-bed"></i> مقاعد مستلقية</span>
+                    </div>
+                    <div class="fleet-price">
+                        <span class="currency">ج.م</span>
+                        <span class="amount">350</span>
+                        <span class="period">/ للرحلة</span>
+                    </div>
+                    <button class="fleet-btn" onclick="showToast('تم اختيار فئة دبل ديكر')">
+                        <i class="fas fa-ticket-alt"></i>
+                        احجز الآن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section routes-section" id="routes">
+        <div class="section-header animate-on-scroll">
+            <span class="section-tag">وجهاتنا المفضلة</span>
+            <h2 class="section-title">أشهر <span>الرحلات</span> والوجهات</h2>
+            <p class="section-desc">أكثر من 27 مدينة مغطاة برحلات يومية منتظمة وأسعار تنافسية</p>
+        </div>
+        <div class="routes-grid">
+            <div class="route-card animate-on-scroll delay-1">
+                <div class="route-header">
+                    <div class="route-cities">
+                        <div class="route-city">
+                            <strong>القاهرة</strong>
+                            <span>ميدان التحرير</span>
+                        </div>
+                        <i class="fas fa-arrow-left route-arrow"></i>
+                        <div class="route-city">
+                            <strong>الإسكندرية</strong>
+                            <span>سيدي جابر</span>
+                        </div>
+                    </div>
+                    <span class="route-duration">2.5 ساعة</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-price">115 <span>ج.م</span></div>
+                    <div class="route-book" onclick="showToast('جاري تحويلك لصفحة الحجز')">
+                        احجز الآن <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="route-card animate-on-scroll delay-2">
+                <div class="route-header">
+                    <div class="route-cities">
+                        <div class="route-city">
+                            <strong>القاهرة</strong>
+                            <span>عبد المنعم رياض</span>
+                        </div>
+                        <i class="fas fa-arrow-left route-arrow"></i>
+                        <div class="route-city">
+                            <strong>الغردقة</strong>
+                            <span>محطة الغردقة</span>
+                        </div>
+                    </div>
+                    <span class="route-duration">7 ساعات</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-price">225 <span>ج.م</span></div>
+                    <div class="route-book" onclick="showToast('جاري تحويلك لصفحة الحجز')">
+                        احجز الآن <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="route-card animate-on-scroll delay-3">
+                <div class="route-header">
+                    <div class="route-cities">
+                        <div class="route-city">
+                            <strong>القاهرة</strong>
+                            <span>عبد المنعم رياض</span>
+                        </div>
+                        <i class="fas fa-arrow-left route-arrow"></i>
+                        <div class="route-city">
+                            <strong>شرم الشيخ</strong>
+                            <span>الرويسات</span>
+                        </div>
+                    </div>
+                    <span class="route-duration">7 ساعات</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-price">275 <span>ج.م</span></div>
+                    <div class="route-book" onclick="showToast('جاري تحويلك لصفحة الحجز')">
+                        احجز الآن <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="route-card animate-on-scroll delay-1">
+                <div class="route-header">
+                    <div class="route-cities">
+                        <div class="route-city">
+                            <strong>القاهرة</strong>
+                            <span>عبد المنعم رياض</span>
+                        </div>
+                        <i class="fas fa-arrow-left route-arrow"></i>
+                        <div class="route-city">
+                            <strong>الأقصر</strong>
+                            <span>محطة الأقصر</span>
+                        </div>
+                    </div>
+                    <span class="route-duration">9 ساعات</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-price">255 <span>ج.م</span></div>
+                    <div class="route-book" onclick="showToast('جاري تحويلك لصفحة الحجز')">
+                        احجز الآن <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="route-card animate-on-scroll delay-2">
+                <div class="route-header">
+                    <div class="route-cities">
+                        <div class="route-city">
+                            <strong>الأقصر</strong>
+                            <span>محطة الأقصر</span>
+                        </div>
+                        <i class="fas fa-arrow-left route-arrow"></i>
+                        <div class="route-city">
+                            <strong>الغردقة</strong>
+                            <span>محطة الغردقة</span>
+                        </div>
+                    </div>
+                    <span class="route-duration">4 ساعات</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-price">135 <span>ج.م</span></div>
+                    <div class="route-book" onclick="showToast('جاري تحويلك لصفحة الحجز')">
+                        احجز الآن <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="route-card animate-on-scroll delay-3">
+                <div class="route-header">
+                    <div class="route-cities">
+                        <div class="route-city">
+                            <strong>القاهرة</strong>
+                            <span>عبد المنعم رياض</span>
+                        </div>
+                        <i class="fas fa-arrow-left route-arrow"></i>
+                        <div class="route-city">
+                            <strong>دهب</strong>
+                            <span>شارع المص bat</span>
+                        </div>
+                    </div>
+                    <span class="route-duration">10 ساعات</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-price">350 <span>ج.م</span></div>
+                    <div class="route-book" onclick="showToast('جاري تحويلك لصفحة الحجز')">
+                        احجز الآن <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="video-section" id="video">
+        <video class="video-bg" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-highway-with-traffic-at-sunset-4127-large.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="video-content">
+            <button class="video-play-btn" onclick="showToast('فيديو تجريبي - يمكن استبداله بفيديو حقيقي لجوباص')">
+                <i class="fas fa-play"></i>
+            </button>
+            <h2>اكتشف تجربة السفر مع جوباص</h2>
+            <p>شاهد كيف نوفر لك رحلة آمنة ومريحة بين جميع مدن مصر</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header animate-on-scroll">
+            <span class="section-tag">آراء العملاء</span>
+            <h2 class="section-title">ماذا يقول <span>عملاؤنا</span> عنا؟</h2>
+            <p class="section-desc">تجارب حقيقية من مسافرين استخدموا خدمات جوباص</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card animate-on-scroll delay-1">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">رحلة رائعة من القاهرة للغردقة! الأتوبيس كان نظيف جداً والمقاعد مريحة. الشاشات الترفيهية والواي فاي جعلوا الوقت يمر بسرعة. سأستخدم جوباص مرة أخرى بالتأكيد!</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">أح</div>
+                    <div class="author-info">
+                        <strong>أحمد محمود</strong>
+                        <span>مسافر متكرر - القاهرة</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card animate-on-scroll delay-2">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">سافرت مع عائلتي من القاهرة للأقصر على فئة Elite Plus. الوجبات الخفيفة والمشروبات الساخنة كانت ممتازة. السائق محترف جداً والرحلة كانت آمنة تماماً. أنصح به بشدة!</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">سـ</div>
+                    <div class="author-info">
+                        <strong>سارة عبدالله</strong>
+                        <span>سائحة - الإسكندرية</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card animate-on-scroll delay-3">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="testimonial-text">التطبيق سهل الاستخدام جداً! حجزت تذكرتي في أقل من دقيقتين. نظام اختيار المقاعد رائع والدفع الإلكتروني آمن. أسعارهم أفضل بكثير من الطيران والقطار.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">مـ</div>
+                    <div class="author-info">
+                        <strong>محمد علي</strong>
+                        <span>طالب جامعي - المنصورة</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="app-section" id="app">
+        <div class="app-container">
+            <div class="app-content animate-on-scroll">
+                <h2>حمّل تطبيق <span>جوباص</span> الآن</h2>
+                <p>احجز تذاكرك بسهولة من هاتفك المحمول، تتبع رحلاتك، واستمتع بعروض حصرية للتطبيق فقط.</p>
+                <div class="app-features">
+                    <div class="app-feature">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>حجز فوري في أقل من دقيقتين</span>
+                    </div>
+                    <div class="app-feature">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>تتبع موقع الأتوبيس لحظة بلحظة</span>
+                    </div>
+                    <div class="app-feature">
+                        <i class="fas fa-percent"></i>
+                        <span>خصومات حصرية للتطبيق</span>
+                    </div>
+                    <div class="app-feature">
+                        <i class="fas fa-bell"></i>
+                        <span>تنبيهات فورية للرحلات والعروض</span>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn" onclick="showToast('جاري التحميل من App Store')">
+                        <i class="fab fa-apple"></i>
+                        App Store
+                    </a>
+                    <a href="#" class="app-btn" onclick="showToast('جاري التحميل من Google Play')">
+                        <i class="fab fa-google-play"></i>
+                        Google Play
+                    </a>
+                </div>
+            </div>
+            <div class="app-visual animate-on-scroll">
+                <div class="app-mockup">
+                    <div class="app-screen">
+                        <div class="app-screen-header">
+                            <h4><i class="fas fa-bus"></i> جوباص</h4>
+                        </div>
+                        <div class="app-screen-body">
+                            <div class="app-trip-card">
+                                <div class="app-trip-info">
+                                    <strong>القاهرة → الغردقة</strong>
+                                    <span>07:00 PM - 02:00 AM</span>
+                                </div>
+                                <div class="app-trip-price">225 ج.م</div>
+                            </div>
+                            <div class="app-trip-card">
+                                <div class="app-trip-info">
+                                    <strong>القاهرة → الأقصر</strong>
+                                    <span>06:00 PM - 03:00 AM</span>
+                                </div>
+                                <div class="app-trip-price">255 ج.م</div>
+                            </div>
+                            <div class="app-trip-card">
+                                <div class="app-trip-info">
+                                    <strong>القاهرة → شرم الشيخ</strong>
+                                    <span>07:35 PM - 02:35 AM</span>
+                                </div>
+                                <div class="app-trip-price">275 ج.م</div>
+                            </div>
+                            <div class="app-trip-card">
+                                <div class="app-trip-info">
+                                    <strong>الأقصر → الغردقة</strong>
+                                    <span>07:30 PM - 11:30 PM</span>
+                                </div>
+                                <div class="app-trip-price">135 ج.م</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-mockup-float mockup-float-1">
+                    <div class="mockup-float-icon"><i class="fas fa-check"></i></div>
+                    <div class="mockup-float-text">
+                        <strong>تم تأكيد الحجز!</strong>
+                        <span>رقم التذكرة: #28491</span>
+                    </div>
+                </div>
+                <div class="app-mockup-float mockup-float-2">
+                    <div class="mockup-float-icon"><i class="fas fa-gift"></i></div>
+                    <div class="mockup-float-text">
+                        <strong>خصم 20%</strong>
+                        <span>على رحلتك القادمة</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo" style="margin-bottom: 20px;">
+                        <div class="logo-icon">Go</div>
+                        <div class="logo-text">go<span style="color: var(--primary-orange);">bus.</span></div>
+                    </div>
+                    <p>أسرع حجز أونلاين لتذاكر أتوبيسات السفر داخل مصر. نغطي أكثر من 27 مدينة بأكثر من 400 أتوبيس حديث.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="#home"><i class="fas fa-chevron-left"></i> الرئيسية</a></li>
+                        <li><a href="#features"><i class="fas fa-chevron-left"></i> المميزات</a></li>
+                        <li><a href="#fleet"><i class="fas fa-chevron-left"></i> الأسطول</a></li>
+                        <li><a href="#routes"><i class="fas fa-chevron-left"></i> الرحلات</a></li>
+                        <li><a href="#booking"><i class="fas fa-chevron-left"></i> احجز الآن</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>الوجهات الشعبية</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> القاهرة → الغردقة</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> القاهرة → شرم الشيخ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> القاهرة → الأقصر</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> القاهرة → الإسكندرية</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الأقصر → الغردقة</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>تواصل معنا</h4>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>19074</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@go-bus.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>ميدان التحرير، القاهرة، مصر</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>خدمة 24 ساعة / 7 أيام</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 جوباص - جميع الحقوق محفوظة</p>
+                <div class="footer-bottom-links">
+                    <a href="#">سياسة الخصوصية</a>
+                    <a href="#">شروط الاستخدام</a>
+                    <a href="#">الأسئلة الشائعة</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">تمت العملية بنجاح</span>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('mobileOverlay').classList.toggle('active');
+        }
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function searchTrips() {
+            const from = document.getElementById('fromCity').value;
+            const to = document.getElementById('toCity').value;
+            const date = document.getElementById('travelDate').value;
+            
+            if (!from || !to || !date) {
+                showToast('يرجى ملء جميع الحقول');
+                return;
+            }
+            if (from === to) {
+                showToast('مدينة الانطلاق والوصول لا يمكن أن تكونا متطابقتين');
+                return;
+            }
+            
+            showToast('جاري البحث عن الرحلات المتاحة...');
+            setTimeout(() => {
+                showToast('تم العثور على 5 رحلات متاحة!');
+            }, 1500);
+        }
+
+        document.getElementById('travelDate').valueAsDate = new Date();
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.backgroundPositionY = (scrolled * 0.5) + 'px';
+            }
+        });
+    </script>
+</body>
+</html>
